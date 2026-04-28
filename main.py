@@ -1,17 +1,23 @@
 import os
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def main():
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("XAI_API_KEY")
     if not api_key:
-        raise ValueError("Variável de ambiente OPENAI_API_KEY não encontrada.")
+        raise ValueError("Variável de ambiente XAI_API_KEY não encontrada.")
 
-    client = OpenAI(api_key=api_key)
+    client = OpenAI(
+        api_key=api_key,
+        base_url="https://api.x.ai/v1"
+    )
 
-    print("Conectando à API do ChatGPT (OpenAI)...\n")
+    print("Conectando à API do Grok (xAI)...\n")
 
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="grok-beta",
         messages=[
             {"role": "system", "content": "Você é um assistente útil."},
             {"role": "user", "content": "Olá! Me diga uma curiosidade interessante sobre inteligência artificial."}

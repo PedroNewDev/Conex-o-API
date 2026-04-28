@@ -1,17 +1,17 @@
-# Conexão com API do ChatGPT (OpenAI)
+# Conexão com API do Grok (xAI)
 
-Projeto de validação de comunicação com a API da OpenAI usando Python.
+Projeto de validação de comunicação com a API do Grok (xAI) usando Python e Flask.
 
 ## Pré-requisitos
 
 - Python 3.8+
-- Chave de acesso da API OpenAI
+- Chave de acesso da API xAI
 
 ## Como obter a chave de API
 
-1. Acesse [platform.openai.com](https://platform.openai.com)
-2. Crie uma conta ou faça login
-3. Vá em **API Keys** e clique em **Create new secret key**
+1. Acesse [console.x.ai](https://console.x.ai)
+2. Faça login com sua conta X (Twitter)
+3. Vá em **API Keys** e clique em **Create API Key**
 4. Copie a chave gerada
 
 ## Configuração do ambiente
@@ -24,37 +24,34 @@ pip install -r requirements.txt
 
 ### 2. Configurar a chave de API
 
-Crie um arquivo `.env` na raiz do projeto (ou configure a variável de ambiente diretamente):
+Copie o arquivo `.env.example` para `.env` e preencha a chave:
 
-**Windows (PowerShell):**
-```powershell
-$env:OPENAI_API_KEY="sua_chave_aqui"
+```
+XAI_API_KEY=sua_chave_aqui
 ```
 
-**Linux/Mac:**
-```bash
-export OPENAI_API_KEY="sua_chave_aqui"
-```
-
-Ou copie o arquivo `.env.example` para `.env` e preencha a chave:
-```
-OPENAI_API_KEY=sua_chave_aqui
-```
-
-### 3. Executar o script
+### 3. Executar o script de validação
 
 ```bash
 python main.py
 ```
 
-## Exemplo de saída
+### 4. Executar a interface web (chat)
+
+```bash
+python app.py
+```
+
+Acesse `http://127.0.0.1:5000` no navegador.
+
+## Exemplo de saída (main.py)
 
 ```
-Conectando à API do ChatGPT (OpenAI)...
+Conectando à API do Grok (xAI)...
 
 === Resposta da API ===
-Modelo: gpt-3.5-turbo-0125
-Tokens utilizados: 87
+Modelo: grok-beta
+Tokens utilizados: 92
 
 Resposta:
 Uma curiosidade interessante sobre inteligência artificial é que...
