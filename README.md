@@ -1,42 +1,34 @@
-# Conexão com API do Grok (xAI)
+# Conexão com API do Gemini (Google)
 
-Projeto de validação de comunicação com a API do Grok (xAI) usando Python e Flask.
+Projeto de validação de comunicação com a API do Gemini usando Python e Flask.
 
-## Pré-requisitos
+## Como obter a chave de API (gratuita)
 
-- Python 3.8+
-- Chave de acesso da API xAI
-
-## Como obter a chave de API
-
-1. Acesse [console.x.ai](https://console.x.ai)
-2. Faça login com sua conta X (Twitter)
-3. Vá em **API Keys** e clique em **Create API Key**
+1. Acesse [aistudio.google.com](https://aistudio.google.com)
+2. Faça login com sua conta Google
+3. Clique em **Get API Key** → **Create API Key**
 4. Copie a chave gerada
 
-## Configuração do ambiente
-
-### 1. Instalar dependências
+## Instalação
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Configurar a chave de API
+## Configuração
 
-Copie o arquivo `.env.example` para `.env` e preencha a chave:
-
+Crie um arquivo `.env` com:
 ```
-XAI_API_KEY=sua_chave_aqui
+GEMINI_API_KEY=sua_chave_aqui
 ```
 
-### 3. Executar o script de validação
+## Executar script de validação
 
 ```bash
 python main.py
 ```
 
-### 4. Executar a interface web (chat)
+## Executar interface web (chat)
 
 ```bash
 python app.py
@@ -44,14 +36,13 @@ python app.py
 
 Acesse `http://127.0.0.1:5000` no navegador.
 
-## Exemplo de saída (main.py)
+## Exemplo de saída
 
 ```
-Conectando à API do Grok (xAI)...
+Conectando à API do Gemini (Google)...
 
 === Resposta da API ===
-Modelo: grok-beta
-Tokens utilizados: 92
+Modelo: gemini-2.0-flash
 
 Resposta:
 Uma curiosidade interessante sobre inteligência artificial é que...

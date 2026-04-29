@@ -1,15 +1,12 @@
 from flask import Flask, request, jsonify, render_template
-from openai import OpenAI
+from google import genai
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
 app = Flask(__name__)
-client = OpenAI(
-    api_key=os.getenv("XAI_API_KEY"),
-    base_url="https://api.x.ai/v1"
-)
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 @app.route("/")
 def index():
@@ -24,20 +21,17 @@ def chat():
         return jsonify({"erro": "Mensagem vazia"}), 400
 
     try:
-        response = client.chat.completions.create(
-            model="grok-beta",
-            messages=[
-                {"role": "system", "content": "Você é um assistente útil e responde em português."},
-                {"role": "user", "content": mensagem}
-            ]
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=mensagem
         )
     except Exception as e:
         return jsonify({"erro": str(e)}), 500
 
     return jsonify({
-        "resposta": response.choices[0].message.content,
-        "modelo": response.model,
-        "tokens": response.usage.total_tokens
+        "resposta": response.text,
+        "modelo": "gemini-2.0-flash",
+        "tokens": response.usage_metadata.total_token_count if response.usage_metadata else 0
     })
 
 if __name__ == "__main__":
