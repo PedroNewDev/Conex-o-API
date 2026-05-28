@@ -6,13 +6,19 @@ load_dotenv()
 
 
 def conectar_banco():
-    return psycopg2.connect(
-        dbname=os.getenv("DB_NAME", "aula"),
-        user=os.getenv("DB_USER", "postgres"),
-        password=os.getenv("DB_PASSWORD", "postgres"),
-        host=os.getenv("DB_HOST", "localhost"),
-        port=os.getenv("DB_PORT", "5432")
-    )
+    try:
+        return psycopg2.connect(
+            dbname=os.getenv("DB_NAME", "aula"),
+            user=os.getenv("DB_USER", "postgres"),
+            password=os.getenv("DB_PASSWORD", "postgres"),
+            host=os.getenv("DB_HOST", "localhost"),
+            port=os.getenv("DB_PORT", "5432"),
+            options="-c client_encoding=UTF8",
+        )
+    except UnicodeDecodeError as e:
+        # libpq on Windows/Portuguese locale sends Latin-1 error messages
+        msg = e.object.decode("cp1252", errors="replace")
+        raise Exception(f"Erro de conexão PostgreSQL: {msg}") from None
 
 
 def inicializar_banco():
