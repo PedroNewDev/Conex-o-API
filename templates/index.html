@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="light">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="theme-color" content="#ffffff"/>
+  <meta name="theme-color" content="#19142a"/>
   <title>LLM Router — Roteamento Multimodelo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -24,58 +24,58 @@
       --transition: .18s ease;
     }
 
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg:            #120f1c;
+      --surface:       #19142a;
+      --surface2:      #1f1934;
+      --surface3:      #2a2245;
+      --border:        #322a4d;
+      --border-strong: #443a66;
+      --text:          #f1ecfa;
+      --text-2:        #b3a8cf;
+      --text-3:        #7d7299;
+      --user-bg:       #7c3aed;
+      --user-fg:       #ffffff;
+      --ia-bg:         #1f1934;
+      --ia-fg:         #f1ecfa;
+      --accent:        #a78bfa;
+      --accent-weak:   #281f44;
+      --accent-ring:   rgba(167,139,250,.32);
+      --green:         #4ade80;
+      --red:           #f1786f;
+      --amber:         #e8b84b;
+      --header-bg:     #19142a;
+      --shadow:        0 1px 2px rgba(0,0,0,.4), 0 16px 40px rgba(76,29,149,.28);
+      --shadow-sm:     0 1px 3px rgba(0,0,0,.45);
+      --code-bg:       #15101f;
+    }
+
     [data-theme="light"] {
       color-scheme: light;
-      --bg:            #f6f6f7;
+      --bg:            #f1ecfb;
       --surface:       #ffffff;
-      --surface2:      #fbfbfc;
-      --surface3:      #f1f1f3;
-      --border:        #e6e6e9;
-      --border-strong: #d6d6da;
-      --text:          #1a1a1e;
-      --text-2:        #56565f;
-      --text-3:        #9a9aa3;
-      --user-bg:       #2d3748;
+      --surface2:      #faf7ff;
+      --surface3:      #f1eafb;
+      --border:        #e7ddf6;
+      --border-strong: #d6c8ee;
+      --text:          #201733;
+      --text-2:        #5c5176;
+      --text-3:        #998cb5;
+      --user-bg:       #7c3aed;
       --user-fg:       #ffffff;
-      --ia-bg:         #fbfbfc;
-      --ia-fg:         #1a1a1e;
-      --accent:        #3a4fc4;
-      --accent-weak:   #eceffb;
-      --accent-ring:   rgba(58,79,196,.22);
+      --ia-bg:         #faf7ff;
+      --ia-fg:         #201733;
+      --accent:        #7c3aed;
+      --accent-weak:   #f1eafb;
+      --accent-ring:   rgba(124,58,237,.22);
       --green:         #15803d;
       --red:           #c0362c;
       --amber:         #b45309;
       --header-bg:     #ffffff;
-      --shadow:        0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
-      --shadow-sm:     0 1px 3px rgba(0,0,0,.08);
-      --code-bg:       #f6f8fa;
-    }
-
-    [data-theme="dark"] {
-      color-scheme: dark;
-      --bg:            #161618;
-      --surface:       #1d1d20;
-      --surface2:      #222226;
-      --surface3:      #292930;
-      --border:        #2e2e34;
-      --border-strong: #3c3c44;
-      --text:          #f2f2f3;
-      --text-2:        #a6a6ae;
-      --text-3:        #74747e;
-      --user-bg:       #3a4fc4;
-      --user-fg:       #ffffff;
-      --ia-bg:         #222226;
-      --ia-fg:         #f2f2f3;
-      --accent:        #8b9bff;
-      --accent-weak:   #23263a;
-      --accent-ring:   rgba(139,155,255,.28);
-      --green:         #4ade80;
-      --red:           #f1786f;
-      --amber:         #e0a23c;
-      --header-bg:     #1d1d20;
-      --shadow:        0 1px 2px rgba(0,0,0,.3), 0 12px 32px rgba(0,0,0,.4);
-      --shadow-sm:     0 1px 3px rgba(0,0,0,.4);
-      --code-bg:       #16181d;
+      --shadow:        0 1px 2px rgba(76,29,149,.06), 0 10px 30px rgba(124,58,237,.12);
+      --shadow-sm:     0 1px 3px rgba(124,58,237,.12);
+      --code-bg:       #f7f4fc;
     }
 
     /* ═══════════════ RESET ═══════════════ */
@@ -135,12 +135,13 @@
     .logo {
       width: 38px; height: 38px;
       border-radius: var(--radius-sm);
-      background: var(--accent);
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      box-shadow: 0 4px 14px var(--accent-ring);
     }
 
     .header-info { flex: 1; min-width: 0; }
@@ -159,14 +160,14 @@
     }
     .router-badge {
       font-size: .62rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: .08em;
       text-transform: uppercase;
-      padding: 2px 7px;
-      border-radius: 4px;
-      color: var(--accent);
-      background: var(--accent-weak);
-      border: 1px solid var(--accent-ring);
+      padding: 3px 9px;
+      border-radius: 5px;
+      color: #fff;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      border: none;
     }
     .header-sub {
       font-size: .74rem;
@@ -955,7 +956,7 @@
 
     /* ─── Theme ─── */
     const html = document.documentElement;
-    const savedTheme = localStorage.getItem("nexus-theme") || "light";
+    const savedTheme = localStorage.getItem("nexus-theme") || "dark";
     applyTheme(savedTheme);
 
     document.getElementById("btnTheme").addEventListener("click", () =>
