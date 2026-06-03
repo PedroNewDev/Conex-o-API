@@ -9,7 +9,7 @@ from langchain_core.messages import SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from db import buscar_conversa_por_sessao, criar_conversa, inicializar_banco, inserir_mensagem
-from prompts import MODOS, MODO_PADRAO, aplicar_tipo_prompt, escolher_provedor
+from prompts import MODOS, MODO_PADRAO, aplicar_tipo_prompt, escolher_provedor, rotear, FORCAS_PROVEDOR
 from safety import validar_mensagem
 
 load_dotenv()
@@ -59,6 +59,23 @@ if os.getenv("OPENAI_API_KEY"):
 
 conversation_histories: dict[int, InMemoryChatMessageHistory] = {}
 
+# Mapa nome → (objeto LLM, modelo) para despacho dinâmico pelo roteador
+def _mapa_llms():
+    m = {"gemini": (_gemini, GEMINI_MODEL)}
+    if _groq_disponivel:     m["groq"] = (_groq, GROQ_MODEL)
+    if _cerebras_disponivel: m["cerebras"] = (_cerebras, CEREBRAS_MODEL)
+    if _gpt_disponivel:      m["gpt"] = (_gpt, GPT_MODEL)
+    return m
+
+
+def _provedores_ativos() -> set:
+    return set(_mapa_llms().keys())
+
+
+# IA-juíza: usa Groq se houver (latência baixa), senão Gemini
+def _llm_juiz():
+    return _groq if _groq_disponivel else _gemini
+
 with app.app_context():
     inicializar_banco()
 
@@ -99,7 +116,7 @@ def status():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    data = request.get_json()
+    data = request.get_json(silent=True) or {}
     mensagem_original = data.get("mensagem", "").strip()
     modo = data.get("modo", MODO_PADRAO)
     tipo_prompt = data.get("tipo_prompt", "simples")
@@ -131,20 +148,47 @@ def chat():
     sistema = MODOS[modo]
     msgs = _montar_mensagens(history, sistema)
 
-    provedor = escolher_provedor(mensagem_original, modo)
-    if provedor == "groq" and not _groq_disponivel:
-        provedor = "gemini"
+    # ── ROTEAMENTO INTELIGENTE (Nível 1 heurística + Nível 2 IA-juíza) ──
+    rota = rotear(
+        mensagem_original, modo,
+        llm_juiz=_llm_juiz(),
+        provedores_ativos=_provedores_ativos(),
+    )
+    provedor = rota["provedor"]
+    etapas = rota["etapas"]
+
+    mapa = _mapa_llms()
+    fallback_aplicado = False
 
     try:
         if provedor == "ambos" and _groq_disponivel:
             resultado = _invocar_ambos(msgs, history, conversa_id, modo, tipo_prompt)
+            resultado["roteamento"] = {
+                "provedor": "ambos",
+                "motivo": rota["motivo"],
+                "etapas": etapas,
+            }
             return jsonify(resultado)
 
-        if provedor == "groq":
-            conteudo, tokens = _invocar_llm(_groq, msgs)
-            modelo_usado = GROQ_MODEL
+        # Despacho dinâmico do provedor escolhido pelo roteador
+        if provedor in mapa:
+            llm, modelo_usado = mapa[provedor]
+            try:
+                conteudo, tokens = _invocar_llm(llm, msgs)
+            except Exception as e:
+                # Provedor escolhido falhou por cota → cadeia de fallback
+                if _is_quota_error(e):
+                    etapas = etapas + [f"{provedor.upper()} sem cota → fallback automático"]
+                    conteudo, tokens, modelo_usado, provedor = _invocar_com_fallback(msgs)
+                    fallback_aplicado = True
+                else:
+                    raise
         else:
             conteudo, tokens, modelo_usado, provedor = _invocar_com_fallback(msgs)
+            fallback_aplicado = True
+
+        if fallback_aplicado:
+            etapas = etapas + [f"Resposta entregue por {provedor.upper()} (fallback)"]
 
     except Exception as e:
         if _is_quota_error(e):
@@ -164,6 +208,12 @@ def chat():
         "modo": modo,
         "tipo_prompt": tipo_prompt,
         "tokens": tokens,
+        "roteamento": {
+            "provedor": provedor,
+            "motivo": rota["motivo"],
+            "etapas": etapas,
+            "fallback": fallback_aplicado,
+        },
     })
 
 
