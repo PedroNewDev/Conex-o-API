@@ -1,79 +1,81 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR" data-theme="light">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nexus AI — Chat Dual</title>
+  <meta name="theme-color" content="#ffffff"/>
+  <title>LLM Router — Roteamento Multimodelo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hlTheme"/>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hlTheme"/>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <style>
     /* ═══════════════ TOKENS ═══════════════ */
     :root {
-      --font: 'Inter', system-ui, sans-serif;
-      --mono: 'JetBrains Mono', monospace;
-      --radius-sm: 8px;
-      --radius:    14px;
-      --radius-lg: 20px;
-      --transition: .22s cubic-bezier(.4,0,.2,1);
-    }
-
-    [data-theme="dark"] {
-      --bg:            #0a0b0f;
-      --bg2:           #0f1117;
-      --surface:       #13151e;
-      --surface2:      #1a1d2e;
-      --surface3:      #20243a;
-      --border:        rgba(255,255,255,.07);
-      --border-strong: rgba(255,255,255,.13);
-      --text:          #e8eaf0;
-      --text-2:        #9399b2;
-      --text-3:        #555c7a;
-      --user-bg:       linear-gradient(135deg,#5b6ef5,#8b5cf6);
-      --user-fg:       #fff;
-      --ia-bg:         #1a1d2e;
-      --ia-fg:         #e8eaf0;
-      --accent:        #5b6ef5;
-      --accent2:       #8b5cf6;
-      --accent-glow:   rgba(91,110,245,.25);
-      --green:         #22c55e;
-      --red:           #ef4444;
-      --amber:         #f59e0b;
-      --header-bg:     rgba(13,15,23,.9);
-      --glass:         rgba(255,255,255,.03);
-      --shadow:        0 24px 48px rgba(0,0,0,.5);
-      --shadow-sm:     0 4px 12px rgba(0,0,0,.3);
-      --hl-theme:      github-dark;
+      --font:  'Inter', system-ui, -apple-system, sans-serif;
+      --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+      --mono:  'JetBrains Mono', ui-monospace, monospace;
+      --radius-sm: 6px;
+      --radius:    10px;
+      --radius-lg: 14px;
+      --transition: .18s ease;
     }
 
     [data-theme="light"] {
-      --bg:            #f4f5fb;
-      --bg2:           #eef0f8;
+      color-scheme: light;
+      --bg:            #f6f6f7;
       --surface:       #ffffff;
-      --surface2:      #f8f9fe;
-      --surface3:      #eff0f9;
-      --border:        rgba(0,0,0,.07);
-      --border-strong: rgba(0,0,0,.13);
-      --text:          #0f1117;
-      --text-2:        #555c7a;
-      --text-3:        #9399b2;
-      --user-bg:       linear-gradient(135deg,#5b6ef5,#8b5cf6);
-      --user-fg:       #fff;
-      --ia-bg:         #f4f5fb;
-      --ia-fg:         #0f1117;
-      --accent:        #5b6ef5;
-      --accent2:       #8b5cf6;
-      --accent-glow:   rgba(91,110,245,.15);
-      --green:         #16a34a;
-      --red:           #dc2626;
-      --amber:         #d97706;
-      --header-bg:     rgba(255,255,255,.85);
-      --glass:         rgba(255,255,255,.6);
-      --shadow:        0 24px 48px rgba(0,0,0,.1);
-      --shadow-sm:     0 4px 12px rgba(0,0,0,.07);
+      --surface2:      #fbfbfc;
+      --surface3:      #f1f1f3;
+      --border:        #e6e6e9;
+      --border-strong: #d6d6da;
+      --text:          #1a1a1e;
+      --text-2:        #56565f;
+      --text-3:        #9a9aa3;
+      --user-bg:       #2d3748;
+      --user-fg:       #ffffff;
+      --ia-bg:         #fbfbfc;
+      --ia-fg:         #1a1a1e;
+      --accent:        #3a4fc4;
+      --accent-weak:   #eceffb;
+      --accent-ring:   rgba(58,79,196,.22);
+      --green:         #15803d;
+      --red:           #c0362c;
+      --amber:         #b45309;
+      --header-bg:     #ffffff;
+      --shadow:        0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+      --shadow-sm:     0 1px 3px rgba(0,0,0,.08);
+      --code-bg:       #f6f8fa;
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg:            #161618;
+      --surface:       #1d1d20;
+      --surface2:      #222226;
+      --surface3:      #292930;
+      --border:        #2e2e34;
+      --border-strong: #3c3c44;
+      --text:          #f2f2f3;
+      --text-2:        #a6a6ae;
+      --text-3:        #74747e;
+      --user-bg:       #3a4fc4;
+      --user-fg:       #ffffff;
+      --ia-bg:         #222226;
+      --ia-fg:         #f2f2f3;
+      --accent:        #8b9bff;
+      --accent-weak:   #23263a;
+      --accent-ring:   rgba(139,155,255,.28);
+      --green:         #4ade80;
+      --red:           #f1786f;
+      --amber:         #e0a23c;
+      --header-bg:     #1d1d20;
+      --shadow:        0 1px 2px rgba(0,0,0,.3), 0 12px 32px rgba(0,0,0,.4);
+      --shadow-sm:     0 1px 3px rgba(0,0,0,.4);
+      --code-bg:       #16181d;
     }
 
     /* ═══════════════ RESET ═══════════════ */
@@ -82,230 +84,205 @@
     body {
       font-family: var(--font);
       background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background var(--transition);
-      overflow: hidden;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* animated bg orbs */
-    body::before, body::after {
-      content: "";
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
-      animation: drift 18s ease-in-out infinite alternate;
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
     }
-    body::before {
-      width: 500px; height: 500px;
-      top: -120px; left: -100px;
-      background: radial-gradient(circle, rgba(91,110,245,.12), transparent 70%);
-    }
-    body::after {
-      width: 400px; height: 400px;
-      bottom: -100px; right: -80px;
-      background: radial-gradient(circle, rgba(139,92,246,.1), transparent 70%);
-      animation-delay: -9s;
-    }
-    [data-theme="light"] body::before { background: radial-gradient(circle, rgba(91,110,245,.08), transparent 70%); }
-    [data-theme="light"] body::after  { background: radial-gradient(circle, rgba(139,92,246,.07), transparent 70%); }
 
-    @keyframes drift {
-      from { transform: translate(0,0) scale(1); }
-      to   { transform: translate(30px,20px) scale(1.1); }
+    /* Visible, consistent focus for every interactive element */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 4px;
     }
 
     /* ═══════════════ APP SHELL ═══════════════ */
     .app {
       position: relative;
-      z-index: 1;
       width: 100%;
-      max-width: 820px;
-      height: 96vh;
+      max-width: 860px;
+      height: min(94vh, 920px);
       display: flex;
       flex-direction: column;
       background: var(--surface);
-      border: 1px solid var(--border-strong);
+      border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow);
       overflow: hidden;
-      transition: background var(--transition), border-color var(--transition);
     }
 
     /* ═══════════════ HEADER ═══════════════ */
     .header {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 14px 18px;
+      gap: 13px;
+      padding: 15px 20px;
       background: var(--header-bg);
-      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
-      transition: background var(--transition), border-color var(--transition);
     }
 
     .logo {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #5b6ef5, #8b5cf6);
+      width: 38px; height: 38px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
       flex-shrink: 0;
-      box-shadow: 0 0 16px var(--accent-glow);
     }
 
-    .header-info { flex: 1; }
+    .header-info { flex: 1; min-width: 0; }
+    .header-title {
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
     .header-name {
-      font-size: .95rem;
-      font-weight: 700;
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      font-weight: 600;
       color: var(--text);
       letter-spacing: -.01em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
-
     .router-badge {
-      font-size: .6rem;
-      font-weight: 700;
-      letter-spacing: .05em;
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .08em;
       text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 20px;
-      color: #fff;
-      background: linear-gradient(135deg, #5b6ef5, #8b5cf6);
-      box-shadow: 0 0 12px var(--accent-glow);
-      animation: badgePulse 2.4s ease-in-out infinite;
+      padding: 2px 7px;
+      border-radius: 4px;
+      color: var(--accent);
+      background: var(--accent-weak);
+      border: 1px solid var(--accent-ring);
     }
-    @keyframes badgePulse {
-      0%, 100% { box-shadow: 0 0 8px var(--accent-glow); }
-      50%      { box-shadow: 0 0 18px var(--accent2); }
+    .header-sub {
+      font-size: .74rem;
+      color: var(--text-3);
+      margin-top: 1px;
     }
 
     .header-models {
       display: flex;
       gap: 6px;
-      margin-top: 3px;
+      margin-top: 7px;
       flex-wrap: wrap;
     }
 
     .model-chip {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 2px 8px;
+      gap: 5px;
+      padding: 2px 9px;
       border-radius: 20px;
-      font-size: .67rem;
-      font-weight: 600;
-      letter-spacing: .03em;
-      text-transform: uppercase;
-      border: 1px solid transparent;
-      transition: all var(--transition);
+      font-size: .68rem;
+      font-weight: 500;
+      color: var(--text-2);
+      background: var(--surface3);
+      border: 1px solid var(--border);
     }
     .model-chip::before {
       content: "";
-      width: 5px; height: 5px;
+      width: 6px; height: 6px;
       border-radius: 50%;
+      background: var(--text-3);
     }
-
-    .chip-gemini { background: rgba(34,197,94,.12); color: #22c55e; border-color: rgba(34,197,94,.2); }
-    .chip-gemini::before { background: #22c55e; box-shadow: 0 0 5px #22c55e; }
-    .chip-groq   { background: rgba(99,102,241,.12); color: #818cf8; border-color: rgba(99,102,241,.2); }
-    .chip-groq::before { background: #818cf8; box-shadow: 0 0 5px #818cf8; }
-    .chip-cerebras { background: rgba(251,191,36,.12); color: #fbbf24; border-color: rgba(251,191,36,.2); }
-    .chip-cerebras::before { background: #fbbf24; box-shadow: 0 0 5px #fbbf24; }
-    .chip-gpt    { background: rgba(16,163,127,.12); color: #34d399; border-color: rgba(16,163,127,.2); }
-    .chip-gpt::before  { background: #34d399; box-shadow: 0 0 5px #34d399; }
-    .chip-off    { opacity: .4; }
+    .chip-gemini::before   { background: var(--green); }
+    .chip-groq::before     { background: var(--accent); }
+    .chip-cerebras::before { background: var(--amber); }
+    .chip-gpt::before      { background: #0f766e; }
+    .chip-off { opacity: .45; }
+    .chip-off::before { background: var(--text-3) !important; }
 
     .header-btns { display: flex; gap: 6px; }
 
     .hbtn {
       width: 34px; height: 34px;
       border-radius: var(--radius-sm);
-      background: var(--surface3);
+      background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text-2);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: .95rem;
-      transition: all var(--transition);
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
     }
-    .hbtn:hover { background: var(--surface2); color: var(--text); border-color: var(--border-strong); }
+    .hbtn:hover { background: var(--surface3); color: var(--text); border-color: var(--border-strong); }
 
     /* ═══════════════ CONTROLS ═══════════════ */
     .controls {
       display: flex;
-      gap: 10px;
-      padding: 10px 16px;
+      gap: 14px;
+      padding: 12px 20px;
       border-bottom: 1px solid var(--border);
       background: var(--surface2);
       flex-wrap: wrap;
       flex-shrink: 0;
-      transition: background var(--transition), border-color var(--transition);
     }
 
     .ctrl-group {
       flex: 1;
-      min-width: 150px;
+      min-width: 160px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
 
     .ctrl-group label {
-      font-size: .65rem;
-      font-weight: 700;
+      font-size: .66rem;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: .07em;
+      letter-spacing: .06em;
       color: var(--text-3);
     }
 
     .ctrl-select {
-      padding: 7px 11px;
-      background: var(--surface3);
-      border: 1px solid var(--border);
+      padding: 8px 30px 8px 11px;
+      background-color: var(--surface);
+      border: 1px solid var(--border-strong);
       border-radius: var(--radius-sm);
       color: var(--text);
       font-family: var(--font);
-      font-size: .84rem;
-      outline: none;
+      font-size: .85rem;
       cursor: pointer;
-      transition: border-color var(--transition), background var(--transition);
+      transition: border-color var(--transition), box-shadow var(--transition);
       appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239a9aa3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 10px center;
-      padding-right: 28px;
+      background-position: right 11px center;
     }
-    .ctrl-select:focus {
+    .ctrl-select:focus-visible {
+      outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      box-shadow: 0 0 0 3px var(--accent-ring);
     }
 
     /* ═══════════════ CHAT ═══════════════ */
     .chat {
       flex: 1;
       overflow-y: auto;
-      padding: 20px 18px;
+      padding: 22px 20px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 18px;
       scroll-behavior: smooth;
     }
-
-    .chat::-webkit-scrollbar { width: 4px; }
+    .chat::-webkit-scrollbar { width: 8px; }
     .chat::-webkit-scrollbar-track { background: transparent; }
-    .chat::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+    .chat::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 
     /* ── empty ── */
     .empty {
@@ -314,49 +291,51 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 60px 20px;
+      gap: 10px;
+      padding: 48px 20px;
       text-align: center;
       color: var(--text-3);
-      pointer-events: none;
     }
-
     .empty-logo {
-      width: 56px; height: 56px;
-      border-radius: 16px;
+      width: 52px; height: 52px;
+      border-radius: var(--radius);
       background: var(--surface3);
-      border: 1px solid var(--border-strong);
+      border: 1px solid var(--border);
+      color: var(--accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
-
-    .empty h2 { font-size: .95rem; font-weight: 600; color: var(--text-2); }
-    .empty p  { font-size: .82rem; max-width: 280px; line-height: 1.6; }
+    .empty h2 {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      text-wrap: balance;
+    }
+    .empty p { font-size: .85rem; max-width: 360px; line-height: 1.6; text-wrap: balance; }
 
     .empty-suggestions {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 7px;
       justify-content: center;
-      margin-top: 8px;
+      margin-top: 10px;
     }
-
     .suggestion {
-      padding: 6px 12px;
-      background: var(--surface3);
+      padding: 7px 13px;
+      background: var(--surface);
       border: 1px solid var(--border-strong);
       border-radius: 20px;
       font-size: .78rem;
+      font-family: var(--font);
       color: var(--text-2);
       cursor: pointer;
-      pointer-events: all;
-      transition: all var(--transition);
+      transition: background var(--transition), border-color var(--transition), color var(--transition);
     }
     .suggestion:hover {
-      background: var(--surface2);
+      background: var(--accent-weak);
       border-color: var(--accent);
       color: var(--accent);
     }
@@ -365,64 +344,47 @@
     .msg-row {
       display: flex;
       flex-direction: column;
-      gap: 5px;
-      animation: msgIn .28s cubic-bezier(.2,.8,.4,1) both;
+      gap: 6px;
+      animation: msgIn .22s ease both;
     }
     .msg-row.user { align-items: flex-end; }
     .msg-row.ai   { align-items: flex-start; }
-
     @keyframes msgIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── sender label ── */
-    .sender {
-      font-size: .68rem;
-      font-weight: 600;
-      color: var(--text-3);
-      letter-spacing: .03em;
-      display: flex;
-      align-items: center;
-      gap: 5px;
     }
 
     /* ── bubbles ── */
     .bubble {
-      max-width: 78%;
+      max-width: 80%;
       padding: 12px 16px;
       border-radius: var(--radius);
-      line-height: 1.65;
-      font-size: .91rem;
+      line-height: 1.66;
+      font-size: .92rem;
       word-break: break-word;
     }
-
     .bubble.user {
       background: var(--user-bg);
       color: var(--user-fg);
-      border-bottom-right-radius: 4px;
-      box-shadow: 0 4px 16px rgba(91,110,245,.3);
+      border-bottom-right-radius: 3px;
     }
-
     .bubble.ai {
       background: var(--ia-bg);
       color: var(--ia-fg);
       border: 1px solid var(--border);
-      border-bottom-left-radius: 4px;
+      border-bottom-left-radius: 3px;
     }
-
     .bubble.error {
-      background: rgba(239,68,68,.08);
-      color: #f87171;
-      border: 1px solid rgba(239,68,68,.2);
-      border-bottom-left-radius: 4px;
+      background: var(--surface2);
+      color: var(--red);
+      border: 1px solid var(--border-strong);
+      border-left: 3px solid var(--red);
     }
-
     .bubble.blocked {
-      background: rgba(245,158,11,.08);
-      color: #fbbf24;
-      border: 1px solid rgba(245,158,11,.2);
-      border-bottom-left-radius: 4px;
+      background: var(--surface2);
+      color: var(--amber);
+      border: 1px solid var(--border-strong);
+      border-left: 3px solid var(--amber);
     }
 
     /* ── markdown ── */
@@ -431,303 +393,267 @@
     .bubble.ai ul, .bubble.ai ol { padding-left: 1.4em; }
     .bubble.ai li             { margin: .25em 0; }
     .bubble.ai strong         { font-weight: 600; color: var(--text); }
-    .bubble.ai em             { color: var(--text-2); }
-    .bubble.ai a              { color: var(--accent); text-decoration: none; }
-    .bubble.ai a:hover        { text-decoration: underline; }
-
+    .bubble.ai a              { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
     .bubble.ai h1,.bubble.ai h2,.bubble.ai h3 {
+      font-family: var(--serif);
       margin: .8em 0 .3em;
       line-height: 1.3;
       font-weight: 600;
       color: var(--text);
+      text-wrap: balance;
     }
-    .bubble.ai h1 { font-size: 1.05em; }
-    .bubble.ai h2 { font-size: .98em; }
-    .bubble.ai h3 { font-size: .92em; }
-
-    .bubble.ai hr {
-      border: none;
-      border-top: 1px solid var(--border-strong);
-      margin: .8em 0;
-    }
-
+    .bubble.ai h1 { font-size: 1.1em; }
+    .bubble.ai h2 { font-size: 1.02em; }
+    .bubble.ai h3 { font-size: .95em; }
+    .bubble.ai hr { border: none; border-top: 1px solid var(--border); margin: .8em 0; }
     .bubble.ai blockquote {
-      border-left: 2px solid var(--accent);
+      border-left: 3px solid var(--border-strong);
       margin: .5em 0;
-      padding: .3em 0 .3em 12px;
+      padding: .2em 0 .2em 12px;
       color: var(--text-2);
-      font-style: italic;
     }
 
     /* code */
     .bubble.ai :not(pre) > code {
       font-family: var(--mono);
-      font-size: .83em;
+      font-size: .84em;
       background: var(--surface3);
-      border: 1px solid var(--border-strong);
+      border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 1px 6px;
-      color: #a78bfa;
+      padding: 1px 5px;
+      color: var(--accent);
     }
-
     .code-block {
       position: relative;
-      margin: .6em 0;
+      margin: .7em 0;
       border-radius: var(--radius-sm);
       overflow: hidden;
-      border: 1px solid var(--border-strong);
+      border: 1px solid var(--border);
     }
-
     .code-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 6px 12px;
-      background: rgba(255,255,255,.04);
+      background: var(--surface3);
       border-bottom: 1px solid var(--border);
       font-family: var(--mono);
       font-size: .68rem;
       color: var(--text-3);
     }
-    [data-theme="light"] .code-header { background: rgba(0,0,0,.04); }
-
     .copy-btn {
       background: none;
       border: none;
-      color: var(--text-3);
+      color: var(--text-2);
       cursor: pointer;
-      font-size: .75rem;
-      padding: 2px 6px;
+      font-size: .72rem;
+      padding: 2px 7px;
       border-radius: 4px;
-      transition: all var(--transition);
+      transition: background var(--transition), color var(--transition);
       font-family: var(--font);
     }
-    .copy-btn:hover { background: var(--surface3); color: var(--text-2); }
-
+    .copy-btn:hover { background: var(--surface); color: var(--text); }
     .bubble.ai pre {
       margin: 0;
-      padding: 14px 14px;
+      padding: 14px;
       overflow-x: auto;
       font-family: var(--mono);
-      font-size: .82em;
+      font-size: .83em;
       line-height: 1.6;
-      background: #0d1117 !important;
+      background: var(--code-bg) !important;
     }
-    [data-theme="light"] .bubble.ai pre { background: #1e2030 !important; }
-
-    .bubble.ai pre::-webkit-scrollbar { height: 4px; }
-    .bubble.ai pre::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+    .bubble.ai pre::-webkit-scrollbar { height: 8px; }
+    .bubble.ai pre::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 
     /* ── meta row ── */
     .msg-meta {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
-
     .meta-badge {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
-      padding: 2px 8px;
+      gap: 5px;
+      padding: 2px 9px;
       border-radius: 20px;
-      font-size: .67rem;
-      font-weight: 600;
-      letter-spacing: .03em;
-    }
-    .meta-badge.gemini { background: rgba(34,197,94,.1); color: #22c55e; }
-    .meta-badge.groq   { background: rgba(129,140,248,.1); color: #818cf8; }
-    .meta-badge.cerebras { background: rgba(251,191,36,.1); color: #fbbf24; }
-    .meta-badge.gpt      { background: rgba(52,211,153,.1); color: #34d399; }
-    .meta-badge.ambos  { background: rgba(251,146,60,.1); color: #fb923c; }
-
-    .meta-text {
       font-size: .68rem;
+      font-weight: 500;
+      color: var(--text-2);
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+    }
+    .meta-badge::before {
+      content: "";
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--text-3);
+    }
+    .meta-badge.gemini::before   { background: var(--green); }
+    .meta-badge.groq::before     { background: var(--accent); }
+    .meta-badge.cerebras::before { background: var(--amber); }
+    .meta-badge.gpt::before      { background: #0f766e; }
+    .meta-badge.ambos::before    { background: var(--amber); }
+    .meta-text {
+      font-size: .7rem;
       color: var(--text-3);
+      font-variant-numeric: tabular-nums;
     }
 
     /* ── typing ── */
-    .typing-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      animation: msgIn .2s ease both;
-    }
-
+    .typing-row { display: flex; align-items: flex-start; animation: msgIn .2s ease both; }
     .typing-bubble {
       background: var(--ia-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      border-bottom-left-radius: 4px;
+      border-bottom-left-radius: 3px;
       padding: 14px 18px;
       display: flex;
       gap: 5px;
       align-items: center;
     }
-
     .dot {
       width: 6px; height: 6px;
       background: var(--text-3);
       border-radius: 50%;
-      animation: pulse 1.2s ease-in-out infinite;
+      animation: blink 1.3s ease-in-out infinite;
     }
     .dot:nth-child(2) { animation-delay: .2s; }
     .dot:nth-child(3) { animation-delay: .4s; }
-
-    @keyframes pulse {
-      0%,80%,100% { opacity: .3; transform: scale(.8); }
-      40%          { opacity: 1; transform: scale(1); }
+    @keyframes blink {
+      0%,80%,100% { opacity: .25; }
+      40%         { opacity: 1; }
     }
 
-    /* ═══════════════ LLM ROUTER — DECISÃO AO VIVO ═══════════════ */
+    /* ═══════════════ LLM ROUTER — TRILHA DE DECISÃO ═══════════════ */
     .route-card {
-      align-self: flex-start;
-      max-width: 82%;
-      background: var(--glass);
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius);
-      padding: 12px 15px;
-      margin-bottom: 2px;
-      backdrop-filter: blur(8px);
+      align-self: stretch;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-sm);
+      padding: 13px 16px;
     }
     .route-title {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       font-size: .68rem;
-      font-weight: 700;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: .06em;
+      letter-spacing: .07em;
       color: var(--accent);
-      margin-bottom: 10px;
+      margin-bottom: 11px;
     }
-    .route-title .pin { animation: spin 2.4s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .route-steps { display: flex; flex-direction: column; gap: 6px; }
+    .route-title .pin { display: inline-flex; }
+    .route-steps { display: flex; flex-direction: column; gap: 8px; }
     .route-step {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
-      font-size: .78rem;
+      gap: 9px;
+      font-size: .8rem;
       color: var(--text-2);
-      line-height: 1.45;
+      line-height: 1.5;
       opacity: 0;
-      transform: translateX(-6px);
-      animation: stepIn .32s cubic-bezier(.2,.8,.4,1) forwards;
+      animation: stepIn .26s ease forwards;
     }
-    @keyframes stepIn { to { opacity: 1; transform: translateX(0); } }
+    @keyframes stepIn { from { opacity: 0; transform: translateY(3px);} to { opacity: 1; transform: translateY(0);} }
     .route-step .num {
       flex-shrink: 0;
-      width: 16px; height: 16px;
+      width: 18px; height: 18px;
       border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
-      font-size: .6rem;
+      background: var(--surface3);
+      border: 1px solid var(--border-strong);
+      color: var(--text-2);
+      font-size: .62rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-top: 1px;
+      font-variant-numeric: tabular-nums;
     }
-    .route-step.final .num { background: var(--green); }
-    .route-step.fallback .num { background: var(--amber); }
+    .route-step.final .num { background: var(--green); border-color: var(--green); color: #fff; }
+    .route-step.fallback .num { background: var(--amber); border-color: var(--amber); color: #fff; }
 
     .route-winner {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 11px;
-      padding-top: 10px;
-      border-top: 1px dashed var(--border-strong);
-      animation: stepIn .4s cubic-bezier(.2,.8,.4,1) both;
+      gap: 9px;
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid var(--border);
     }
     .rw-label {
-      font-size: .66rem;
+      font-size: .67rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: .06em;
       color: var(--text-3);
     }
     .rw-chip {
-      font-size: .74rem;
-      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .76rem;
+      font-weight: 600;
       padding: 4px 12px;
       border-radius: 20px;
-      color: #fff;
-      background: linear-gradient(135deg, #5b6ef5, #8b5cf6);
-      box-shadow: 0 2px 10px var(--accent-glow);
+      color: var(--text);
+      background: var(--surface3);
+      border: 1px solid var(--border-strong);
     }
-    .rw-chip.gemini   { background: linear-gradient(135deg,#22c55e,#16a34a); }
-    .rw-chip.groq     { background: linear-gradient(135deg,#818cf8,#6366f1); }
-    .rw-chip.cerebras { background: linear-gradient(135deg,#fbbf24,#d97706); }
-    .rw-chip.gpt      { background: linear-gradient(135deg,#34d399,#10a37f); }
-    .rw-chip.ambos    { background: linear-gradient(135deg,#fb923c,#f97316); }
+    .rw-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--text-3); }
+    .rw-chip.gemini::before   { background: var(--green); }
+    .rw-chip.groq::before     { background: var(--accent); }
+    .rw-chip.cerebras::before { background: var(--amber); }
+    .rw-chip.gpt::before      { background: #0f766e; }
+    .rw-chip.ambos::before    { background: var(--amber); }
 
     /* ═══════════════ COMPARISON ═══════════════ */
     .cmp-wrap { width: 100%; }
-
     .cmp-label {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-size: .7rem;
-      font-weight: 700;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: .07em;
       color: var(--text-3);
-      margin-bottom: 10px;
+      margin-bottom: 11px;
     }
-
-    .cmp-label span {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .cmp-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
+    .cmp-label span { flex: 1; height: 1px; background: var(--border); }
+    .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .cmp-panel {
       background: var(--ia-bg);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--radius-sm);
       overflow: hidden;
-      transition: border-color var(--transition);
     }
-    .cmp-panel:hover { border-color: var(--border-strong); }
-
     .cmp-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px;
+      padding: 9px 13px;
       border-bottom: 1px solid var(--border);
       background: var(--surface3);
     }
-
     .cmp-name {
-      font-size: .72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .05em;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .73rem;
+      font-weight: 600;
+      color: var(--text);
     }
-    .cmp-name.gemini { color: #22c55e; }
-    .cmp-name.groq   { color: #818cf8; }
-
-    .cmp-tokens {
-      font-size: .68rem;
-      color: var(--text-3);
-      font-family: var(--mono);
-    }
-
+    .cmp-name::before { content:""; width: 7px; height: 7px; border-radius: 50%; background: var(--text-3); }
+    .cmp-name.gemini::before { background: var(--green); }
+    .cmp-name.groq::before   { background: var(--accent); }
+    .cmp-tokens { font-size: .68rem; color: var(--text-3); font-family: var(--mono); font-variant-numeric: tabular-nums; }
     .cmp-body {
       padding: 14px;
       font-size: .88rem;
-      line-height: 1.65;
+      line-height: 1.66;
       color: var(--ia-fg);
       white-space: pre-wrap;
       word-break: break-word;
@@ -735,36 +661,34 @@
 
     /* ═══════════════ INPUT AREA ═══════════════ */
     .input-area {
-      padding: 14px 16px;
+      padding: 14px 20px 16px;
       border-top: 1px solid var(--border);
       background: var(--surface2);
       flex-shrink: 0;
-      transition: background var(--transition), border-color var(--transition);
     }
-
     .input-shell {
       display: flex;
       align-items: flex-end;
       gap: 10px;
-      background: var(--surface3);
-      border: 1.5px solid var(--border-strong);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
       border-radius: var(--radius);
-      padding: 4px 4px 4px 14px;
+      padding: 5px 5px 5px 15px;
       transition: border-color var(--transition), box-shadow var(--transition);
     }
     .input-shell:focus-within {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      box-shadow: 0 0 0 3px var(--accent-ring);
     }
-
     #input {
       flex: 1;
+      min-width: 0;
       background: none;
       border: none;
       outline: none;
       color: var(--text);
       font-family: var(--font);
-      font-size: .91rem;
+      font-size: .92rem;
       line-height: 1.6;
       resize: none;
       padding: 8px 0;
@@ -772,62 +696,47 @@
       overflow-y: auto;
     }
     #input::placeholder { color: var(--text-3); }
-    #input::-webkit-scrollbar { width: 3px; }
-    #input::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
-
-    .input-actions {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding-bottom: 4px;
-    }
-
+    .input-actions { display: flex; align-items: center; gap: 6px; padding-bottom: 4px; }
     .char-pill {
-      font-size: .66rem;
+      font-size: .67rem;
       color: var(--text-3);
       font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
       padding: 3px 7px;
-      border-radius: 10px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      transition: color var(--transition);
     }
-    .char-pill.warn { color: var(--amber); border-color: rgba(245,158,11,.3); }
-    .char-pill.over { color: var(--red);   border-color: rgba(239,68,68,.3); }
-
+    .char-pill.warn { color: var(--amber); }
+    .char-pill.over { color: var(--red); }
     #btnSend {
       width: 36px; height: 36px;
       border-radius: var(--radius-sm);
-      background: linear-gradient(135deg,#5b6ef5,#8b5cf6);
+      background: var(--accent);
       border: none;
-      color: white;
+      color: #fff;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
-      transition: all var(--transition);
+      transition: opacity var(--transition), background var(--transition);
       flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(91,110,245,.4);
     }
-    #btnSend:hover:not(:disabled) { transform: scale(1.07); box-shadow: 0 4px 14px rgba(91,110,245,.5); }
-    #btnSend:active:not(:disabled){ transform: scale(.95); }
-    #btnSend:disabled { background: var(--surface3); box-shadow: none; cursor: default; opacity: .5; }
-
+    #btnSend:hover:not(:disabled) { opacity: .88; }
+    #btnSend:disabled { background: var(--surface3); color: var(--text-3); cursor: default; }
     .input-hint {
-      margin-top: 7px;
-      font-size: .66rem;
+      margin-top: 9px;
+      font-size: .68rem;
       color: var(--text-3);
       text-align: center;
     }
     .input-hint kbd {
       display: inline-block;
-      padding: 1px 5px;
+      padding: 1px 6px;
       border: 1px solid var(--border-strong);
+      border-bottom-width: 2px;
       border-radius: 4px;
       font-family: var(--mono);
-      font-size: .7em;
-      background: var(--surface3);
+      font-size: .72em;
+      background: var(--surface);
+      color: var(--text-2);
     }
 
     /* ═══════════════ TOAST ═══════════════ */
@@ -836,14 +745,13 @@
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%) translateY(70px);
-      background: var(--surface2);
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius);
+      background: var(--text);
+      color: var(--bg);
+      border-radius: var(--radius-sm);
       padding: 9px 18px;
       font-size: .83rem;
-      color: var(--text-2);
       box-shadow: var(--shadow-sm);
-      transition: transform .3s cubic-bezier(.2,.8,.4,1), opacity .3s;
+      transition: transform .26s ease, opacity .26s ease;
       opacity: 0;
       z-index: 999;
       white-space: nowrap;
@@ -854,72 +762,96 @@
     /* ═══════════════ SCROLLTOP BTN ═══════════════ */
     .scroll-btn {
       position: absolute;
-      bottom: 100px;
-      right: 20px;
-      width: 32px; height: 32px;
+      bottom: 104px;
+      right: 22px;
+      width: 34px; height: 34px;
       border-radius: 50%;
-      background: var(--surface2);
+      background: var(--surface);
       border: 1px solid var(--border-strong);
       color: var(--text-2);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: .8rem;
       opacity: 0;
-      transform: translateY(10px);
-      transition: all var(--transition);
+      transform: translateY(8px);
+      transition: opacity var(--transition), transform var(--transition), background var(--transition);
       z-index: 10;
+      box-shadow: var(--shadow-sm);
+      pointer-events: none;
     }
-    .scroll-btn.visible { opacity: 1; transform: translateY(0); }
-    .scroll-btn:hover   { background: var(--surface3); }
+    .scroll-btn.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .scroll-btn:hover { background: var(--surface3); }
 
     /* ═══════════════ RESPONSIVE ═══════════════ */
-    @media (max-width: 540px) {
-      .app { border-radius: 0; height: 100vh; border: none; }
-      body { overflow: hidden; }
+    @media (max-width: 560px) {
+      body { padding: 0; }
+      .app { border-radius: 0; height: 100vh; border: none; max-width: none; }
       .cmp-grid { grid-template-columns: 1fr; }
       .bubble { max-width: 92%; }
+    }
+
+    /* ═══════════════ MOTION PREFERENCES ═══════════════ */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="app">
+  <main class="app">
 
     <!-- HEADER -->
     <header class="header">
-      <div class="logo">✦</div>
+      <div class="logo" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="5" cy="12" r="2.2"/><circle cx="19" cy="5" r="2.2"/><circle cx="19" cy="19" r="2.2"/>
+          <path d="M7 11 16.5 6.2M7 13 16.5 17.8"/>
+        </svg>
+      </div>
       <div class="header-info">
-        <div class="header-name">Nexus AI <span class="router-badge">⚡ LLM Router</span></div>
+        <div class="header-title">
+          <span class="header-name" translate="no">Nexus AI</span>
+          <span class="router-badge">LLM Router</span>
+        </div>
+        <div class="header-sub">Roteamento inteligente entre múltiplos modelos de linguagem</div>
         <div class="header-models">
-          <div class="model-chip chip-gemini" id="chipGemini">Gemini 2.5 Flash Lite</div>
-          <div class="model-chip chip-groq chip-off" id="chipGroq">Llama 3.3 70B</div>
-          <div class="model-chip chip-cerebras chip-off" id="chipCerebras">Cerebras</div>
-          <div class="model-chip chip-gpt chip-off" id="chipGpt">GPT-4o Mini</div>
+          <span class="model-chip chip-gemini" id="chipGemini">Gemini 2.5 Flash Lite</span>
+          <span class="model-chip chip-groq chip-off" id="chipGroq">Llama 3.3 70B</span>
+          <span class="model-chip chip-cerebras chip-off" id="chipCerebras">Cerebras</span>
+          <span class="model-chip chip-gpt chip-off" id="chipGpt">GPT-4o Mini</span>
         </div>
       </div>
       <div class="header-btns">
-        <button class="hbtn" id="btnTheme" title="Alternar tema">🌙</button>
-        <button class="hbtn" id="btnClear" title="Limpar conversa">⌫</button>
+        <button class="hbtn" id="btnTheme" type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema"></button>
+        <button class="hbtn" id="btnClear" type="button" aria-label="Limpar conversa" title="Limpar conversa">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 6h18M8 6V4h8v2m-9 0v14a1 1 0 001 1h8a1 1 0 001-1V6"/>
+          </svg>
+        </button>
       </div>
     </header>
 
     <!-- CONTROLS -->
     <div class="controls">
       <div class="ctrl-group">
-        <label>Modo</label>
-        <select class="ctrl-select" id="modo">
-          <option value="auto" selected>🧭 Auto — LLM Router decide</option>
+        <label for="modo">Modo</label>
+        <select class="ctrl-select" id="modo" name="modo">
+          <option value="auto" selected>Automático — o LLM Router decide</option>
           <option value="resumido">Resumido</option>
           <option value="professor">Professor</option>
           <option value="tecnico">Técnico</option>
-          <option value="detalhado">Detalhado — comparar IAs</option>
+          <option value="detalhado">Detalhado — comparar modelos</option>
           <option value="suporte_tecnico">Suporte Técnico</option>
         </select>
       </div>
       <div class="ctrl-group">
-        <label>Tipo de Prompt</label>
-        <select class="ctrl-select" id="tipo_prompt">
+        <label for="tipo_prompt">Tipo de Prompt</label>
+        <select class="ctrl-select" id="tipo_prompt" name="tipo_prompt">
           <option value="simples">Simples</option>
           <option value="estruturado">Estruturado</option>
           <option value="especializado">Especializado</option>
@@ -928,51 +860,64 @@
     </div>
 
     <!-- CHAT -->
-    <div class="chat" id="chat">
+    <div class="chat" id="chat" role="log" aria-live="polite" aria-label="Histórico da conversa">
       <div class="empty" id="empty">
-        <div class="empty-logo">✦</div>
+        <div class="empty-logo" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5" cy="12" r="2.2"/><circle cx="19" cy="5" r="2.2"/><circle cx="19" cy="19" r="2.2"/>
+            <path d="M7 11 16.5 6.2M7 13 16.5 17.8"/>
+          </svg>
+        </div>
         <h2>Como posso ajudar?</h2>
-        <p>Escolha o modo e tipo de prompt, então envie sua mensagem.</p>
+        <p>Faça uma pergunta e o LLM Router seleciona automaticamente o modelo mais adequado para respondê-la.</p>
         <div class="empty-suggestions">
-          <div class="suggestion" onclick="fillInput('Explique machine learning em 3 pontos')">Machine Learning</div>
-          <div class="suggestion" onclick="fillInput('Como funciona o protocolo HTTPS?')">Como funciona HTTPS?</div>
-          <div class="suggestion" onclick="fillInput('Escreva uma função Python para inverter uma string')">Python — inverter string</div>
-          <div class="suggestion" onclick="fillInput('Quais são as diferenças entre SQL e NoSQL?')">SQL vs NoSQL</div>
+          <button type="button" class="suggestion" onclick="fillInput('Explique machine learning em 3 pontos')">Machine Learning</button>
+          <button type="button" class="suggestion" onclick="fillInput('Como funciona o protocolo HTTPS?')">Como funciona HTTPS?</button>
+          <button type="button" class="suggestion" onclick="fillInput('Escreva uma função Python para inverter uma string')">Python — inverter string</button>
+          <button type="button" class="suggestion" onclick="fillInput('Quais são as diferenças entre SQL e NoSQL?')">SQL vs NoSQL</button>
         </div>
       </div>
     </div>
 
     <!-- SCROLL TO BOTTOM -->
-    <button class="scroll-btn" id="scrollBtn" onclick="rolar()" title="Rolar para baixo">↓</button>
+    <button class="scroll-btn" id="scrollBtn" type="button" onclick="rolar()" aria-label="Rolar para o fim da conversa" title="Rolar para baixo">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
 
     <!-- INPUT -->
     <div class="input-area">
+      <label for="input" class="sr-only">Mensagem</label>
       <div class="input-shell">
-        <textarea id="input" rows="1" placeholder="Envie uma mensagem…"></textarea>
+        <textarea id="input" name="input" rows="1" placeholder="Escreva sua mensagem…" autocomplete="off" spellcheck="true"></textarea>
         <div class="input-actions">
-          <span class="char-pill" id="charPill" style="display:none">0</span>
-          <button id="btnSend" onclick="enviar()">↑</button>
+          <span class="char-pill" id="charPill" style="display:none" aria-hidden="true">0</span>
+          <button id="btnSend" type="button" onclick="enviar()" aria-label="Enviar mensagem">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
         </div>
       </div>
       <div class="input-hint">
-        <kbd>Enter</kbd> para enviar · <kbd>Shift+Enter</kbd> nova linha
+        <kbd>Enter</kbd> para enviar · <kbd>Shift</kbd>+<kbd>Enter</kbd> nova linha
       </div>
     </div>
-  </div>
+  </main>
 
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
     /* ─── Setup ─── */
     const MAX_CHARS = 2000;
     const MODO_LABEL = {
-      auto: "Auto · LLM Router", resumido: "Resumido", professor: "Professor", tecnico: "Técnico",
+      auto: "Automático · LLM Router", resumido: "Resumido", professor: "Professor", tecnico: "Técnico",
       detalhado: "Detalhado", suporte_tecnico: "Suporte Técnico",
     };
     const PROV_LABEL = {
       gemini: "Gemini 2.5 Flash Lite", groq: "Llama 3.3 70B",
       cerebras: "Cerebras", gpt: "GPT-4o Mini", ambos: "Gemini + Groq",
     };
+
+    const SVG_MOON = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>';
+    const SVG_SUN  = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
 
     const chatEl    = document.getElementById("chat");
     const inputEl   = document.getElementById("input");
@@ -984,17 +929,16 @@
 
     /* ─── marked + highlight.js ─── */
     marked.setOptions({ breaks: true, gfm: true });
-
     const renderer = new marked.Renderer();
     renderer.code = (code, lang) => {
       const validLang = lang && hljs.getLanguage(lang) ? lang : "plaintext";
       const highlighted = hljs.highlight(code, { language: validLang }).value;
-      const escapedLang = lang ? lang.replace(/</g,"&lt;") : "code";
+      const escapedLang = lang ? lang.replace(/</g,"&lt;") : "código";
       return `
         <div class="code-block">
           <div class="code-header">
             <span>${escapedLang}</span>
-            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+            <button class="copy-btn" type="button" onclick="copyCode(this)" aria-label="Copiar código">Copiar</button>
           </div>
           <pre><code class="hljs language-${validLang}">${highlighted}</code></pre>
         </div>`;
@@ -1004,14 +948,14 @@
     function copyCode(btn) {
       const code = btn.closest(".code-block").querySelector("code").innerText;
       navigator.clipboard.writeText(code).then(() => {
-        btn.textContent = "✓";
+        btn.textContent = "Copiado";
         setTimeout(() => btn.textContent = "Copiar", 1500);
       });
     }
 
     /* ─── Theme ─── */
     const html = document.documentElement;
-    const savedTheme = localStorage.getItem("nexus-theme") || "dark";
+    const savedTheme = localStorage.getItem("nexus-theme") || "light";
     applyTheme(savedTheme);
 
     document.getElementById("btnTheme").addEventListener("click", () =>
@@ -1020,7 +964,9 @@
     function applyTheme(t) {
       html.dataset.theme = t;
       localStorage.setItem("nexus-theme", t);
-      document.getElementById("btnTheme").textContent = t === "dark" ? "☀️" : "🌙";
+      document.getElementById("btnTheme").innerHTML = t === "dark" ? SVG_SUN : SVG_MOON;
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = t === "dark" ? "#1d1d20" : "#ffffff";
       const hl = document.getElementById("hlTheme");
       hl.href = t === "dark"
         ? "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
@@ -1037,7 +983,7 @@
 
     /* ─── Clear ─── */
     document.getElementById("btnClear").addEventListener("click", () => {
-      if (!confirm("Limpar conversa?")) return;
+      if (!confirm("Limpar a conversa atual?")) return;
       [...chatEl.children].forEach(c => { if (c !== emptyEl) c.remove(); });
       emptyEl.style.display = "";
       showToast("Conversa limpa");
@@ -1048,10 +994,7 @@
       const distBottom = chatEl.scrollHeight - chatEl.scrollTop - chatEl.clientHeight;
       scrollBtn.classList.toggle("visible", distBottom > 120);
     });
-
-    function rolar() {
-      chatEl.scrollTo({ top: chatEl.scrollHeight, behavior: "smooth" });
-    }
+    function rolar() { chatEl.scrollTo({ top: chatEl.scrollHeight, behavior: "smooth" }); }
 
     /* ─── Textarea auto-resize + char count ─── */
     inputEl.addEventListener("input", () => {
@@ -1066,11 +1009,9 @@
         charPill.style.display = "none";
       }
     });
-
     inputEl.addEventListener("keydown", e => {
       if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); enviar(); }
     });
-
     function fillInput(text) {
       inputEl.value = text;
       inputEl.dispatchEvent(new Event("input"));
@@ -1088,9 +1029,11 @@
 
     /* ─── Helpers ─── */
     function hideEmpty() { emptyEl.style.display = "none"; }
-
     function nowStr() {
-      return new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+      return new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" }).format(new Date());
+    }
+    function escHtml(s) {
+      return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     }
 
     /* ─── DOM builders ─── */
@@ -1098,15 +1041,12 @@
       hideEmpty();
       const row = document.createElement("div");
       row.className = "msg-row user";
-
       const bubble = document.createElement("div");
       bubble.className = "bubble user";
       bubble.textContent = text;
-
       const meta = document.createElement("div");
       meta.className = "msg-meta";
       meta.innerHTML = `<span class="meta-text">${nowStr()}</span>`;
-
       row.appendChild(bubble);
       row.appendChild(meta);
       chatEl.appendChild(row);
@@ -1117,37 +1057,35 @@
       const row = document.createElement("div");
       row.id = "typingRow";
       row.className = "typing-row";
-
       const bubble = document.createElement("div");
       bubble.className = "typing-bubble";
       bubble.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
-
       row.appendChild(bubble);
       chatEl.appendChild(row);
     }
+    function removeTyping() { document.getElementById("typingRow")?.remove(); }
 
-    function removeTyping() {
-      document.getElementById("typingRow")?.remove();
-    }
+    const NODE_ICON = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="2.2"/><circle cx="19" cy="5" r="2.2"/><circle cx="19" cy="19" r="2.2"/><path d="M7 11 16.5 6.2M7 13 16.5 17.8"/></svg>';
 
     function addRoteamento(rot) {
       if (!rot || !rot.etapas || !rot.etapas.length) return Promise.resolve();
       hideEmpty();
       const card = document.createElement("div");
       card.className = "route-card";
-
       const title = document.createElement("div");
       title.className = "route-title";
-      title.innerHTML = `<span class="pin">🧭</span> LLM Router · decisão em tempo real`;
+      title.innerHTML = `<span class="pin">${NODE_ICON}</span> LLM Router · trilha de decisão`;
       card.appendChild(title);
-
       const steps = document.createElement("div");
       steps.className = "route-steps";
       card.appendChild(steps);
       chatEl.appendChild(card);
       rolar();
 
-      // Etapas surgem em sequência (efeito "pensando")
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const delay = reduce ? 0 : 360;
+
+      // Etapas surgem em sequência, simulando o raciocínio do roteador
       return new Promise(resolve => {
         rot.etapas.forEach((txt, i) => {
           setTimeout(() => {
@@ -1162,14 +1100,14 @@
               const prov = rot.provedor || "gemini";
               const winner = document.createElement("div");
               winner.className = "route-winner";
-              winner.innerHTML = `
-                <span class="rw-label">Roteado para</span>
-                <span class="rw-chip ${prov}">${PROV_LABEL[prov] || prov}</span>`;
+              winner.innerHTML =
+                `<span class="rw-label">Roteado para</span>` +
+                `<span class="rw-chip ${prov}">${PROV_LABEL[prov] || prov}</span>`;
               card.appendChild(winner);
               rolar();
-              setTimeout(resolve, 250);
+              setTimeout(resolve, reduce ? 0 : 220);
             }
-          }, i * 420);
+          }, i * delay);
         });
       });
     }
@@ -1178,22 +1116,17 @@
       hideEmpty();
       const row = document.createElement("div");
       row.className = "msg-row ai";
-
       const bubble = document.createElement("div");
       bubble.className = "bubble ai";
       bubble.innerHTML = marked.parse(resposta);
-
       const provClass = { gemini: "gemini", groq: "groq", cerebras: "cerebras", gpt: "gpt", ambos: "ambos" }[provedor] || "gemini";
       const modoLabel = MODO_LABEL[modo] || modo;
-
       const meta = document.createElement("div");
       meta.className = "msg-meta";
       meta.innerHTML = `
         <span class="meta-badge ${provClass}">${modelo}</span>
-        <span class="meta-text">${modoLabel} · ${tipo_prompt} · ${tokens} tok</span>
-        <span class="meta-text">${nowStr()}</span>
-      `;
-
+        <span class="meta-text">${modoLabel} · ${tipo_prompt} · ${tokens} tokens</span>
+        <span class="meta-text">${nowStr()}</span>`;
       row.appendChild(bubble);
       row.appendChild(meta);
       chatEl.appendChild(row);
@@ -1203,12 +1136,10 @@
       hideEmpty();
       const wrap = document.createElement("div");
       wrap.className = "msg-row ai cmp-wrap";
-
       const label = document.createElement("div");
       label.className = "cmp-label";
-      label.innerHTML = `<span></span>⚖️ Comparação — Modo Detalhado<span></span>`;
+      label.innerHTML = `<span></span>Comparação — Modo Detalhado<span></span>`;
       wrap.appendChild(label);
-
       const grid = document.createElement("div");
       grid.className = "cmp-grid";
       grid.appendChild(makePanel("gemini", "Gemini", data.modelo,     data.tokens,      data.resposta));
@@ -1223,7 +1154,7 @@
       p.innerHTML = `
         <div class="cmp-head">
           <span class="cmp-name ${cls}">${name}</span>
-          <span class="cmp-tokens">${modelo} · ${tokens}t</span>
+          <span class="cmp-tokens">${modelo} · ${tokens} tok</span>
         </div>
         <div class="cmp-body">${escHtml(body)}</div>`;
       return p;
@@ -1235,13 +1166,10 @@
       row.className = "msg-row ai";
       const bubble = document.createElement("div");
       bubble.className = `bubble ${type}`;
-      bubble.textContent = (type === "blocked" ? "🚫 " : "⚠️ ") + msg;
+      const prefixo = type === "blocked" ? "Bloqueado — " : "Erro — ";
+      bubble.textContent = prefixo + msg;
       row.appendChild(bubble);
       chatEl.appendChild(row);
-    }
-
-    function escHtml(s) {
-      return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     }
 
     /* ─── Send ─── */
@@ -1272,7 +1200,7 @@
         const data = await res.json();
 
         if (data.bloqueado)                             addError(data.erro, "blocked");
-        else if (res.status === 429)                    addError("⏳ " + data.erro, "blocked");
+        else if (res.status === 429)                    addError(data.erro, "blocked");
         else if (data.erro)                             addError(data.erro, "error");
         else if (data.comparacao && data.resposta_groq) {
           await addRoteamento(data.roteamento);
@@ -1282,10 +1210,9 @@
           await addRoteamento(data.roteamento);
           addAI(data.resposta, data.modelo, data.provedor, data.modo, data.tipo_prompt, data.tokens);
         }
-
       } catch {
         removeTyping();
-        addError("Erro de conexão com o servidor.", "error");
+        addError("Não foi possível conectar ao servidor.", "error");
       }
 
       rolar();
