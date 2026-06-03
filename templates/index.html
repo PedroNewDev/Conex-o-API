@@ -167,6 +167,26 @@
       font-weight: 700;
       color: var(--text);
       letter-spacing: -.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .router-badge {
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 20px;
+      color: #fff;
+      background: linear-gradient(135deg, #5b6ef5, #8b5cf6);
+      box-shadow: 0 0 12px var(--accent-glow);
+      animation: badgePulse 2.4s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 8px var(--accent-glow); }
+      50%      { box-shadow: 0 0 18px var(--accent2); }
     }
 
     .header-models {
@@ -560,6 +580,90 @@
       40%          { opacity: 1; transform: scale(1); }
     }
 
+    /* ═══════════════ LLM ROUTER — DECISÃO AO VIVO ═══════════════ */
+    .route-card {
+      align-self: flex-start;
+      max-width: 82%;
+      background: var(--glass);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 12px 15px;
+      margin-bottom: 2px;
+      backdrop-filter: blur(8px);
+    }
+    .route-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .route-title .pin { animation: spin 2.4s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .route-steps { display: flex; flex-direction: column; gap: 6px; }
+    .route-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: .78rem;
+      color: var(--text-2);
+      line-height: 1.45;
+      opacity: 0;
+      transform: translateX(-6px);
+      animation: stepIn .32s cubic-bezier(.2,.8,.4,1) forwards;
+    }
+    @keyframes stepIn { to { opacity: 1; transform: translateX(0); } }
+    .route-step .num {
+      flex-shrink: 0;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: .6rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .route-step.final .num { background: var(--green); }
+    .route-step.fallback .num { background: var(--amber); }
+
+    .route-winner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 11px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-strong);
+      animation: stepIn .4s cubic-bezier(.2,.8,.4,1) both;
+    }
+    .rw-label {
+      font-size: .66rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-3);
+    }
+    .rw-chip {
+      font-size: .74rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      color: #fff;
+      background: linear-gradient(135deg, #5b6ef5, #8b5cf6);
+      box-shadow: 0 2px 10px var(--accent-glow);
+    }
+    .rw-chip.gemini   { background: linear-gradient(135deg,#22c55e,#16a34a); }
+    .rw-chip.groq     { background: linear-gradient(135deg,#818cf8,#6366f1); }
+    .rw-chip.cerebras { background: linear-gradient(135deg,#fbbf24,#d97706); }
+    .rw-chip.gpt      { background: linear-gradient(135deg,#34d399,#10a37f); }
+    .rw-chip.ambos    { background: linear-gradient(135deg,#fb923c,#f97316); }
+
     /* ═══════════════ COMPARISON ═══════════════ */
     .cmp-wrap { width: 100%; }
 
@@ -786,9 +890,9 @@
     <header class="header">
       <div class="logo">✦</div>
       <div class="header-info">
-        <div class="header-name">Nexus AI</div>
+        <div class="header-name">Nexus AI <span class="router-badge">⚡ LLM Router</span></div>
         <div class="header-models">
-          <div class="model-chip chip-gemini" id="chipGemini">Gemini 2.0 Flash</div>
+          <div class="model-chip chip-gemini" id="chipGemini">Gemini 2.5 Flash Lite</div>
           <div class="model-chip chip-groq chip-off" id="chipGroq">Llama 3.3 70B</div>
           <div class="model-chip chip-cerebras chip-off" id="chipCerebras">Cerebras</div>
           <div class="model-chip chip-gpt chip-off" id="chipGpt">GPT-4o Mini</div>
@@ -805,6 +909,7 @@
       <div class="ctrl-group">
         <label>Modo</label>
         <select class="ctrl-select" id="modo">
+          <option value="auto" selected>🧭 Auto — LLM Router decide</option>
           <option value="resumido">Resumido</option>
           <option value="professor">Professor</option>
           <option value="tecnico">Técnico</option>
@@ -861,8 +966,12 @@
     /* ─── Setup ─── */
     const MAX_CHARS = 2000;
     const MODO_LABEL = {
-      resumido: "Resumido", professor: "Professor", tecnico: "Técnico",
+      auto: "Auto · LLM Router", resumido: "Resumido", professor: "Professor", tecnico: "Técnico",
       detalhado: "Detalhado", suporte_tecnico: "Suporte Técnico",
+    };
+    const PROV_LABEL = {
+      gemini: "Gemini 2.5 Flash Lite", groq: "Llama 3.3 70B",
+      cerebras: "Cerebras", gpt: "GPT-4o Mini", ambos: "Gemini + Groq",
     };
 
     const chatEl    = document.getElementById("chat");
@@ -1021,6 +1130,50 @@
       document.getElementById("typingRow")?.remove();
     }
 
+    function addRoteamento(rot) {
+      if (!rot || !rot.etapas || !rot.etapas.length) return Promise.resolve();
+      hideEmpty();
+      const card = document.createElement("div");
+      card.className = "route-card";
+
+      const title = document.createElement("div");
+      title.className = "route-title";
+      title.innerHTML = `<span class="pin">🧭</span> LLM Router · decisão em tempo real`;
+      card.appendChild(title);
+
+      const steps = document.createElement("div");
+      steps.className = "route-steps";
+      card.appendChild(steps);
+      chatEl.appendChild(card);
+      rolar();
+
+      // Etapas surgem em sequência (efeito "pensando")
+      return new Promise(resolve => {
+        rot.etapas.forEach((txt, i) => {
+          setTimeout(() => {
+            const isFinal = i === rot.etapas.length - 1;
+            const isFallback = /fallback/i.test(txt);
+            const step = document.createElement("div");
+            step.className = "route-step" + (isFinal ? " final" : "") + (isFallback ? " fallback" : "");
+            step.innerHTML = `<span class="num">${isFinal ? "✓" : i + 1}</span><span>${escHtml(txt)}</span>`;
+            steps.appendChild(step);
+            rolar();
+            if (isFinal) {
+              const prov = rot.provedor || "gemini";
+              const winner = document.createElement("div");
+              winner.className = "route-winner";
+              winner.innerHTML = `
+                <span class="rw-label">Roteado para</span>
+                <span class="rw-chip ${prov}">${PROV_LABEL[prov] || prov}</span>`;
+              card.appendChild(winner);
+              rolar();
+              setTimeout(resolve, 250);
+            }
+          }, i * 420);
+        });
+      });
+    }
+
     function addAI(resposta, modelo, provedor, modo, tipo_prompt, tokens) {
       hideEmpty();
       const row = document.createElement("div");
@@ -1121,8 +1274,14 @@
         if (data.bloqueado)                             addError(data.erro, "blocked");
         else if (res.status === 429)                    addError("⏳ " + data.erro, "blocked");
         else if (data.erro)                             addError(data.erro, "error");
-        else if (data.comparacao && data.resposta_groq) addComparacao(data);
-        else addAI(data.resposta, data.modelo, data.provedor, data.modo, data.tipo_prompt, data.tokens);
+        else if (data.comparacao && data.resposta_groq) {
+          await addRoteamento(data.roteamento);
+          addComparacao(data);
+        }
+        else {
+          await addRoteamento(data.roteamento);
+          addAI(data.resposta, data.modelo, data.provedor, data.modo, data.tipo_prompt, data.tokens);
+        }
 
       } catch {
         removeTyping();

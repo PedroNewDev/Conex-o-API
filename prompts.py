@@ -1,6 +1,12 @@
 import re
 
 MODOS = {
+    "auto": (
+        "Você é um assistente versátil e inteligente. Adapte automaticamente seu tom e "
+        "profundidade ao tipo de pergunta: seja técnico e preciso quando envolver código, "
+        "didático quando for um conceito novo, e objetivo quando a pergunta for direta. "
+        "Responda sempre com clareza."
+    ),
     "tecnico": (
         "Você é um assistente técnico especializado. Responda com precisão técnica, "
         "use terminologia correta da área, inclua detalhes de implementação quando relevante. "
@@ -31,7 +37,7 @@ MODOS = {
     ),
 }
 
-MODO_PADRAO = "resumido"
+MODO_PADRAO = "auto"
 
 _TECNICO_KWS = {
     "código", "code", "programar", "programming", "bug", "erro", "error", "api",
@@ -97,13 +103,15 @@ def _classificar_heuristica(mensagem: str, modo: str):
     """Nível 1 — decisão imediata por modo/palavras-chave.
     Retorna (provedor, motivo) ou (None, None) se for ambíguo (vai pra IA-juíza).
     """
-    # Modos com destino fixo
-    if modo in ("tecnico", "suporte_tecnico"):
-        return "gemini", "Modo técnico → Gemini (forte em raciocínio técnico)"
-    if modo == "detalhado":
-        return "ambos", "Modo detalhado → compara Gemini e Groq lado a lado"
-    if modo == "professor":
-        return "groq", "Modo professor → Groq (didático e rápido)"
+    # Modo auto → LLM Router decide 100% pela intenção (sem destino fixo).
+    # Nos demais modos, o destino é fixado pela escolha manual do usuário.
+    if modo != "auto":
+        if modo in ("tecnico", "suporte_tecnico"):
+            return "gemini", "Modo técnico → Gemini (forte em raciocínio técnico)"
+        if modo == "detalhado":
+            return "ambos", "Modo detalhado → compara Gemini e Groq lado a lado"
+        if modo == "professor":
+            return "groq", "Modo professor → Groq (didático e rápido)"
 
     palavras = set(re.findall(r"\w+", mensagem.lower()))
 
