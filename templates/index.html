@@ -983,11 +983,13 @@
     const scrollBtn = document.getElementById("scrollBtn");
 
     /* ─── marked + highlight.js ─── */
+    let markdownReady = false;
+    if (window.marked) {
     marked.setOptions({ breaks: true, gfm: true });
     const renderer = new marked.Renderer();
     renderer.code = (code, lang) => {
-      const validLang = lang && hljs.getLanguage(lang) ? lang : "plaintext";
-      const highlighted = hljs.highlight(code, { language: validLang }).value;
+      const validLang = lang && window.hljs && hljs.getLanguage(lang) ? lang : "plaintext";
+      const highlighted = window.hljs ? hljs.highlight(code, { language: validLang }).value : escHtml(code);
       const escapedLang = lang ? lang.replace(/</g,"&lt;") : "código";
       return `
         <div class="code-block">
@@ -999,6 +1001,18 @@
         </div>`;
     };
     marked.use({ renderer });
+    markdownReady = true;
+    }
+
+    function renderMarkdown(text) {
+      const content = String(text ?? "");
+      if (!markdownReady) return escHtml(content).replace(/\n/g, "<br>");
+      try {
+        return marked.parse(content);
+      } catch (err) {
+        return escHtml(content).replace(/\n/g, "<br>");
+      }
+    }
 
     function copyCode(btn) {
       const code = btn.closest(".code-block").querySelector("code").innerText;
@@ -1173,7 +1187,7 @@
       row.className = "msg-row ai";
       const bubble = document.createElement("div");
       bubble.className = "bubble ai";
-      bubble.innerHTML = marked.parse(resposta);
+      bubble.innerHTML = renderMarkdown(resposta);
       const provClass = { gemini: "gemini", groq: "groq", cerebras: "cerebras", gpt: "gpt", ambos: "ambos" }[provedor] || "gemini";
       const modoLabel = MODO_LABEL[modo] || modo;
       const meta = document.createElement("div");
@@ -1244,6 +1258,7 @@
       addTyping();
       rolar();
 
+      let recebeuResposta = false;
       try {
         const res = await fetch("/chat", {
           method: "POST",
@@ -1252,7 +1267,9 @@
         });
 
         removeTyping();
-        const data = await res.json();
+        const raw = await res.text();
+        const data = raw ? JSON.parse(raw) : {};
+        recebeuResposta = true;
 
         if (data.bloqueado)                             addError(data.erro, "blocked");
         else if (res.status === 429)                    addError(data.erro, "blocked");
@@ -1265,9 +1282,15 @@
           await addRoteamento(data.roteamento);
           addAI(data.resposta, data.modelo, data.provedor, data.modo, data.tipo_prompt, data.tokens);
         }
-      } catch {
+      } catch (err) {
         removeTyping();
-        addError("Não foi possível conectar ao servidor.", "error");
+        const detalhe = err && err.message ? ` (${err.message})` : "";
+        addError(
+          recebeuResposta
+            ? `A resposta chegou, mas houve erro ao exibir na tela.${detalhe}`
+            : `Não foi possível conectar ao servidor.${detalhe}`,
+          "error"
+        );
       }
 
       rolar();
